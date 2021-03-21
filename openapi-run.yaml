@@ -1,0 +1,49 @@
+  swagger: '2.0'
+  info:
+    title: Cloud Endpoints + Cloud Run
+    description: Sample API on Cloud Endpoints with a Cloud Run backend
+    version: 1.0.0
+    #REPLACE THE HOST NAME WITH THE HOST NAME OF ESP V2 CLOUD RUN URL
+  host:  my-cloud-endpoint-server-rkqg7xtvnq-ue.a.run.app
+  schemes:
+    - https
+  produces:
+    - application/json
+  x-google-backend:
+    #RELACE THE ADDRESS WITH YOUR BACKEND CLOUD RUN URL(WITH HTTPS://)
+    address:  https://my-express-js-app-rkqg7xtvnq-ue.a.run.app
+    protocol: h2
+  paths:
+  #first path
+    /:
+      get:
+        summary: Greet a user
+        operationId: firstpath
+        responses:
+          '200':
+            description: A successful response
+            schema:
+              type: string
+#second path
+    /hello:   
+      get:
+        security:
+          - firebase: [] 
+        summary: Greet a user
+        operationId: hello
+        responses:
+          '200':
+            description: A successful response
+            schema:
+              type: string
+
+
+  securityDefinitions:
+    firebase:
+      authorizationUrl: ""
+      flow: "implicit"
+      type: "oauth2"
+      # Replace YOUR-PROJECT-ID with your project ID
+      x-google-issuer: "https://securetoken.google.com/YOUR-PROJECT-ID"
+      x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+      x-google-audiences: "YOUR-PROJECT-ID"
